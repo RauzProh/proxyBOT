@@ -111,10 +111,10 @@ async def messages(message: types.Message, state: FSMContext):
             prolong_period = int(message.text)
             await state.update_data(prolong_period = prolong_period)
             proxies_order = await get_proxy_order_by_id(data['prolong_id'])
-            if data['chosen_version'] == "6" and prolong_period<3:
+            if proxies_order.version == "6" and prolong_period<3:
                     await message.answer('Можно продлить от 3 дней, отправьте другое количество')
                     return
-            if data['chosen_version'] in ["3", 4] and prolong_period<7:
+            if proxies_order.version in ["3", 4] and prolong_period<7:
                 await message.answer('Можно продлить от 7 дней, отправьте другое количество')
                 return
 
@@ -127,7 +127,7 @@ async def messages(message: types.Message, state: FSMContext):
             print(proxies_order)
             get_price = await pxAPI.get_price(len(proxies), prolong_period )
             pay_link = get_payment_link(get_price['price'], "example@mail.ru")
-            await state.update_data(paym_id = pay_link[1])
+            await state.update_data(pay_id = pay_link[1])
             await message.answer(f"Продлить на 5 дней стоит: {get_price['price']}", reply_markup=prolong_pay_buttons(pay_link))
 
             
@@ -167,11 +167,11 @@ async def messages(message: types.Message, state: FSMContext):
                 final_price = await pxAPI.get_price(data['b_count'], period, data["chosen_version"])
                 await state.update_data(final_price=final_price)
                 
-                link = get_payment_link(final_price['price'], "example@mail.ru")
-                await state.update_data(paym_id = pay_link[1])
+                pay_link = get_payment_link(final_price['price'], "example@mail.ru")
+                await state.update_data(pay_id = pay_link[1])
 
 
-                await message.answer(f'Финальная цена: {final_price['price']}',reply_markup=check_pay_buttons(link))
+                await message.answer(f'Финальная цена: {final_price['price']}',reply_markup=check_pay_buttons(pay_link))
             except ValueError:
                 await message.answer('Пожалуйста, введите число!')
 
@@ -207,12 +207,15 @@ async def get_oplata(call: types.CallbackQuery, state: FSMContext):
         await call.message.answer("Оплата прошла успешно", reply_markup=usermenu)
     pxAPI = PX6API()
     data = await state.get_data()
-    if data["pay_id"]:
-        paym_id = data["pay_id"]
+    print('check')
+    print(data)
+    if data.get("pay_id"):
+        print("in")
+        pay_id = data["pay_id"]
     else:
         return
-    buy = await pxAPI.buy(data['b_count'], data['period'], data['chosen_country'], data['chosen_version'] 
-    )
+    print('out')
+    buy = await pxAPI.buy(data['b_count'], data['period'], data['chosen_country'], data['chosen_version'] )
     await state.clear()
 
     # buy = {'status': 'yes', 'user_id': '491758', 'balance': '310.48', 'currency': 'RUB', 'date_mod': '2024-11-03 02:13:10', 'order_id': 12740532, 'count': '10', 'price': '36.00', 'period': '5', 'version': '6', 'type': 'http', 'country': 'au', 'list': {'34073930': {'id': '34073930', 'version': '6', 'ip': '2001:19f0:5801:c24:7bc8:3c57:fa87:ffba', 'host': '149.28.161.95', 'port': '12013', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073931': {'id': '34073931', 'version': '6', 'ip': '2001:19f0:5801:c24:6427:a4f7:c94a:27af', 'host': '149.28.161.95', 'port': '12016', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073932': {'id': '34073932', 'version': '6', 'ip': '2001:19f0:5801:c24:cd05:5227:71a0:9c09', 'host': '149.28.161.95', 'port': '12017', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073933': {'id': '34073933', 'version': '6', 'ip': '2001:19f0:5801:c24:c32a:9029:ecb5:cc7f', 'host': '149.28.161.95', 'port': '12018', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073934': {'id': '34073934', 'version': '6', 'ip': '2001:19f0:5801:c24:e19c:cae1:ffbe:2c0d', 'host': '149.28.161.95', 'port': '12020', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073935': {'id': '34073935', 'version': '6', 'ip': '2001:19f0:5801:c24:2e2d:4a48:1554:985e', 'host': '149.28.161.95', 'port': '12022', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073936': {'id': '34073936', 'version': '6', 'ip': '2001:19f0:5801:c24:27f2:771e:b3a7:e7d9', 'host': '149.28.161.95', 'port': '12034', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073937': {'id': '34073937', 'version': '6', 'ip': '2001:19f0:5801:c24:bf3a:f950:fde3:d1d4', 'host': '149.28.161.95', 'port': '12046', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073938': {'id': '34073938', 'version': '6', 'ip': '2001:19f0:5801:c24:fe2c:a277:9730:a207', 'host': '149.28.161.95', 'port': '12047', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073939': {'id': '34073939', 'version': '6', 'ip': '2001:19f0:5801:c24:468a:5b11:b575:a1fc', 'host': '149.28.161.95', 'port': '12050', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}}}
@@ -271,8 +274,8 @@ async def get_prolongoplata(call: types.CallbackQuery, state: FSMContext):
 
     res = check_oplata(pay_id)
     data = await state.get_data()
-    if data["pay_id"]:
-        paym_id = data["pay_id"]
+    if data.get('pay_id'):
+        pay_id = data["pay_id"]
     else:
         return
     prolong_period = data['prolong_period']
@@ -286,7 +289,7 @@ async def get_prolongoplata(call: types.CallbackQuery, state: FSMContext):
     spisok_prolong_id = []
     for i in proxies:
         spisok_prolong_id.append(i.px6_id)
-    await call.message.answer("Оплата прошла успешно")
+    await call.message.answer("Оплата прошла успешно, прокси продлены")
     pxAPI = PX6API()
     res = await pxAPI.prolong(spisok_prolong_id,prolong_period)
     print(res)
