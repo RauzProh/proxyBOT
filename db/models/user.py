@@ -24,4 +24,4 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     # Связь с заказами
-    orders: Mapped[List["ProxyOrder"]] = relationship(back_populates="user")
+    orders: Mapped[List["ProxyOrder"]] = relationship("ProxyOrder", back_populates="user")

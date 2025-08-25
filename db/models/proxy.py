@@ -24,3 +24,4 @@ class Proxy(Base):
 
     # Связь с заказом
     order: Mapped["ProxyOrder"] = relationship("ProxyOrder", back_populates="proxies")
+

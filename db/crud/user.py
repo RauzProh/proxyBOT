@@ -1,6 +1,8 @@
 from sqlalchemy import select
 from db.session import SessionLocal
 from db.models.user import User, Role
+from db.models.proxyorders import ProxyOrder    
+from db.models.proxy import Proxy
 
 
 

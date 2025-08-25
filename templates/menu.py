@@ -15,10 +15,14 @@ def generate_kb_choice_country(countries: list[str]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for country in countries:
         builder.button(text=country, callback_data=f"choosecountry_{country}")
-    # builder.button(text="Отмена", callback_data="cancel")
+    builder.button(text="назад", callback_data="back")
     builder.adjust(2)  # 2 кнопки в ряд
     return builder.as_markup()
 
+builder = InlineKeyboardBuilder()
+builder.button(text="назад", callback_data="back")
+
+kbback =  builder.as_markup()
 
 def generate_orders(orders: list[ProxyOrder]) -> InlineKeyboardMarkup:
 
@@ -82,6 +86,9 @@ def check_pay_buttons(pay_id):
             ],
             [
                 InlineKeyboardButton(text="Проверить оплату", callback_data=f"oplata_{pay_id[1]}"),
+            ],
+            [
+                InlineKeyboardButton(text="Назад", callback_data=f"back"),
             ]
         ]
     )

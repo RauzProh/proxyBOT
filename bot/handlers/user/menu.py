@@ -13,7 +13,7 @@ from integrations.px6 import PX6API
 
 from templates.menu import version_proxy, generate_orders
 
-from templates.menu import generate_kb_choice_country, check_pay_buttons, proxy_version, generate_prolong, prolong_pay_buttons, usermenu
+from templates.menu import generate_kb_choice_country, check_pay_buttons, proxy_version, generate_prolong, prolong_pay_buttons, usermenu, kbback
 from integrations.yookassa import get_payment_link, check_oplata
 from aiogram import Router
 
@@ -56,9 +56,9 @@ async def choose_version(callback_query: types.CallbackQuery, state: FSMContext)
     countries = await pxAPI.get_country(version)
     data = await state.get_data()
     if data.get("b_count"):
-        data.pop("b_count", None)
+        await state.update_data(b_count=None)
     if data.get('period'):
-        data.pop('period', None)
+        await state.update_data(b_count=None)
     # price = await pxAPI.get_price(1,1,version)
     # await callback_query.message.answer(f'1 шт на 1д стоит: {price['price_single']}')
     await callback_query.message.answer(f"Выберите страну:", reply_markup=generate_kb_choice_country(countries['list']))
@@ -76,13 +76,13 @@ async def choose_country(callback_query: types.CallbackQuery, state: FSMContext)
     getcount = await pxAPI.get_count(country, version)
     await state.update_data(count=getcount['count'])
     if data.get("b_count"):
-        data.pop("b_count", None)
+        await state.update_data(b_count=None)
     if data.get('period'):
-        data.pop('period', None)
+        await state.update_data(period=None)
     print("вывод в фиат")
     print(getcount)
     await callback_query.message.answer(f"в наличии: {getcount['count']}")
-    await callback_query.message.answer(f'Напишите нужное вам количество')
+    await callback_query.message.answer(f'Напишите нужное вам количество', reply_markup=kbback)
 
 
 @router_message.message()
@@ -144,7 +144,7 @@ async def messages(message: types.Message, state: FSMContext):
                 b_count = int(message.text)
                 print('go')
                 await state.update_data(b_count=b_count)
-                await message.answer('Напишите период в днях')
+                await message.answer('Напишите период в днях', reply_markup=kbback)
             except ValueError:
                 await message.answer('Пожалуйста, введите число!')
             return  # останавливаем дальнейшую обработку
@@ -265,6 +265,38 @@ async def prolong(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer("Напишите на сколько дней продлить")
     await state.update_data(prolong_id=prolong)
 
+@router_message.callback_query(lambda c: c.data == "back")
+async def back(call: types.CallbackQuery, state: FSMContext):
+    await call.bot.answer_callback_query(call.id)
+
+    data = await state.get_data()
+    if data.get('chosen_version') and data.get('chosen_country') and data.get("b_count") and data.get("period"):
+        print(4)
+        await state.update_data(period=None)
+        await call.message.answer('Напишите период в днях', reply_markup=kbback)
+        return
+
+    if data.get('chosen_version') and data.get('chosen_country') and data.get("b_count"):
+        print(3)
+        await state.update_data(b_count=None)
+        await call.message.answer(f"в наличии: {data['count']}")
+        await call.message.answer(f'Напишите нужное вам количество', reply_markup=kbback)
+        return
+
+    if data.get('chosen_version') and data.get('chosen_country'):
+        print(2)
+        await state.update_data(chosen_country=None)
+        pxAPI = PX6API()
+        countries = await pxAPI.get_country(data['chosen_version'])
+        await call.message.answer(f"Выберите страну:", reply_markup=generate_kb_choice_country(countries['list']))
+        return
+    if data.get('chosen_version'):
+        print(1)
+        await state.update_data(chosen_version=None)
+        await call.message.answer("Выберите версию прокси:", reply_markup=version_proxy)
+    
+
+
 
 @router_message.callback_query(lambda c: c.data.startswith("prolongoplata_" ))
 async def get_prolongoplata(call: types.CallbackQuery, state: FSMContext):
@@ -305,5 +337,6 @@ async def get_prolongoplata(call: types.CallbackQuery, state: FSMContext):
     await asyncio.gather(*tasks, return_exceptions=True)
 
     if res:
-        data.pop("prolong_id", None)
-        data.pop("prolong_period", None)
+        await state.update_data(prolong_period=None)
+        await state.update_data(prolong_id=None)
+    
