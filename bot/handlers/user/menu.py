@@ -205,55 +205,55 @@ async def get_oplata(call: types.CallbackQuery, state: FSMContext):
         await call.message.answer("Вы ещё не оплатили!")
     elif res == "succeeded":
         await call.message.answer("Оплата прошла успешно", reply_markup=usermenu)
-    pxAPI = PX6API()
-    data = await state.get_data()
-    print('check')
-    print(data)
-    if data.get("pay_id"):
-        print("in")
-        pay_id = data["pay_id"]
-    else:
-        return
-    print('out')
-    buy = await pxAPI.buy(data['b_count'], data['period'], data['chosen_country'], data['chosen_version'] )
-    await state.clear()
+        pxAPI = PX6API()
+        data = await state.get_data()
+        print('check')
+        print(data)
+        if data.get("pay_id"):
+            print("in")
+            pay_id = data["pay_id"]
+        else:
+            return
+        print('out')
+        buy = await pxAPI.buy(data['b_count'], data['period'], data['chosen_country'], data['chosen_version'] )
+        await state.clear()
 
-    # buy = {'status': 'yes', 'user_id': '491758', 'balance': '310.48', 'currency': 'RUB', 'date_mod': '2024-11-03 02:13:10', 'order_id': 12740532, 'count': '10', 'price': '36.00', 'period': '5', 'version': '6', 'type': 'http', 'country': 'au', 'list': {'34073930': {'id': '34073930', 'version': '6', 'ip': '2001:19f0:5801:c24:7bc8:3c57:fa87:ffba', 'host': '149.28.161.95', 'port': '12013', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073931': {'id': '34073931', 'version': '6', 'ip': '2001:19f0:5801:c24:6427:a4f7:c94a:27af', 'host': '149.28.161.95', 'port': '12016', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073932': {'id': '34073932', 'version': '6', 'ip': '2001:19f0:5801:c24:cd05:5227:71a0:9c09', 'host': '149.28.161.95', 'port': '12017', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073933': {'id': '34073933', 'version': '6', 'ip': '2001:19f0:5801:c24:c32a:9029:ecb5:cc7f', 'host': '149.28.161.95', 'port': '12018', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073934': {'id': '34073934', 'version': '6', 'ip': '2001:19f0:5801:c24:e19c:cae1:ffbe:2c0d', 'host': '149.28.161.95', 'port': '12020', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073935': {'id': '34073935', 'version': '6', 'ip': '2001:19f0:5801:c24:2e2d:4a48:1554:985e', 'host': '149.28.161.95', 'port': '12022', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073936': {'id': '34073936', 'version': '6', 'ip': '2001:19f0:5801:c24:27f2:771e:b3a7:e7d9', 'host': '149.28.161.95', 'port': '12034', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073937': {'id': '34073937', 'version': '6', 'ip': '2001:19f0:5801:c24:bf3a:f950:fde3:d1d4', 'host': '149.28.161.95', 'port': '12046', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073938': {'id': '34073938', 'version': '6', 'ip': '2001:19f0:5801:c24:fe2c:a277:9730:a207', 'host': '149.28.161.95', 'port': '12047', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073939': {'id': '34073939', 'version': '6', 'ip': '2001:19f0:5801:c24:468a:5b11:b575:a1fc', 'host': '149.28.161.95', 'port': '12050', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}}}
-    user = await get_user_by_tg_id(call.from_user.id)
-    order = await create_proxy_order(user_id=user.id,order_id_px6=buy['order_id'], count=buy['count'], price=buy['price'], period=buy['period'], version=buy['version'], country=buy['country'])
-    for proxy in buy['list'].values():   # теперь proxy = {...}
-        await create_proxy(
-            order_id=order.id,
-            px6_id=int(proxy['id']),
-            country=buy['country'],
-            host=proxy['host'],
-            port=proxy['port'],
-            username=proxy['user'],   # у тебя в JSON ключ называется "user", а не "username"
-            password=proxy['pass'],   # и "pass", а не "password"
-            date_start=proxy['date'],
-            date_end=proxy['date_end']
-        )   
+        # buy = {'status': 'yes', 'user_id': '491758', 'balance': '310.48', 'currency': 'RUB', 'date_mod': '2024-11-03 02:13:10', 'order_id': 12740532, 'count': '10', 'price': '36.00', 'period': '5', 'version': '6', 'type': 'http', 'country': 'au', 'list': {'34073930': {'id': '34073930', 'version': '6', 'ip': '2001:19f0:5801:c24:7bc8:3c57:fa87:ffba', 'host': '149.28.161.95', 'port': '12013', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073931': {'id': '34073931', 'version': '6', 'ip': '2001:19f0:5801:c24:6427:a4f7:c94a:27af', 'host': '149.28.161.95', 'port': '12016', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073932': {'id': '34073932', 'version': '6', 'ip': '2001:19f0:5801:c24:cd05:5227:71a0:9c09', 'host': '149.28.161.95', 'port': '12017', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073933': {'id': '34073933', 'version': '6', 'ip': '2001:19f0:5801:c24:c32a:9029:ecb5:cc7f', 'host': '149.28.161.95', 'port': '12018', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073934': {'id': '34073934', 'version': '6', 'ip': '2001:19f0:5801:c24:e19c:cae1:ffbe:2c0d', 'host': '149.28.161.95', 'port': '12020', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073935': {'id': '34073935', 'version': '6', 'ip': '2001:19f0:5801:c24:2e2d:4a48:1554:985e', 'host': '149.28.161.95', 'port': '12022', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073936': {'id': '34073936', 'version': '6', 'ip': '2001:19f0:5801:c24:27f2:771e:b3a7:e7d9', 'host': '149.28.161.95', 'port': '12034', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073937': {'id': '34073937', 'version': '6', 'ip': '2001:19f0:5801:c24:bf3a:f950:fde3:d1d4', 'host': '149.28.161.95', 'port': '12046', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073938': {'id': '34073938', 'version': '6', 'ip': '2001:19f0:5801:c24:fe2c:a277:9730:a207', 'host': '149.28.161.95', 'port': '12047', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}, '34073939': {'id': '34073939', 'version': '6', 'ip': '2001:19f0:5801:c24:468a:5b11:b575:a1fc', 'host': '149.28.161.95', 'port': '12050', 'user': 'ass6Ge', 'pass': 'wza9Ga', 'type': 'http', 'date': '2025-08-25 00:02:55', 'date_end': '2025-08-30 00:02:55', 'unixtime': 1756069375, 'unixtime_end': 1756501375, 'active': '1'}}}
+        user = await get_user_by_tg_id(call.from_user.id)
+        order = await create_proxy_order(user_id=user.id,order_id_px6=buy['order_id'], count=buy['count'], price=buy['price'], period=buy['period'], version=buy['version'], country=buy['country'])
+        for proxy in buy['list'].values():   # теперь proxy = {...}
+            await create_proxy(
+                order_id=order.id,
+                px6_id=int(proxy['id']),
+                country=buy['country'],
+                host=proxy['host'],
+                port=proxy['port'],
+                username=proxy['user'],   # у тебя в JSON ключ называется "user", а не "username"
+                password=proxy['pass'],   # и "pass", а не "password"
+                date_start=proxy['date'],
+                date_end=proxy['date_end']
+            )   
 
-    admins = await get_admins()
+        admins = await get_admins()
 
-    tg_id = call.from_user.id
-    proxies = await get_proxies_by_order(order.id)
-    print('awdawdwa')
-    text = ''
-    text = f"Заказ id: {order.id}\n\n"
-    for i in proxies:
-        text+=f'Прокси: <code>{i.host}:{i.port}</code>\n'
-        text+=f'Логин: <code>{i.username}</code>\n'
-        text+=f"Пароль: <code>{i.password}</code>\n\n"
+        tg_id = call.from_user.id
+        proxies = await get_proxies_by_order(order.id)
+        print('awdawdwa')
+        text = ''
+        text = f"Заказ id: {order.id}\n\n"
+        for i in proxies:
+            text+=f'Прокси: <code>{i.host}:{i.port}</code>\n'
+            text+=f'Логин: <code>{i.username}</code>\n'
+            text+=f"Пароль: <code>{i.password}</code>\n\n"
 
-    text+=f"Дата истечения: {i.date_end}"
-    await call.message.answer(text, reply_markup=generate_prolong(order.id))
-        
+        text+=f"Дата истечения: {i.date_end}"
+        await call.message.answer(text, reply_markup=generate_prolong(order.id))
+            
 
-    tasks = []
-    for admin in admins:
-        tasks.append(call.bot.send_message(admin.tg_id, f"Пользователь <code>{tg_id}</code> купил #{order.id} {order.version} {order.count}шт за {order.price}"))
-    await asyncio.gather(*tasks, return_exceptions=True)
+        tasks = []
+        for admin in admins:
+            tasks.append(call.bot.send_message(admin.tg_id, f"Пользователь <code>{tg_id}</code> купил #{order.id} {order.version} {order.count}шт за {order.price}"))
+        await asyncio.gather(*tasks, return_exceptions=True)
 
 
 
@@ -315,28 +315,27 @@ async def get_prolongoplata(call: types.CallbackQuery, state: FSMContext):
     if res == "pending":
         await call.message.answer("Вы ещё не оплатили!")
     elif res == "succeeded":
-        pass
-    await state.clear()
-    proxies = await get_proxies_by_order(prolong_id)
-    spisok_prolong_id = []
-    for i in proxies:
-        spisok_prolong_id.append(i.px6_id)
-    await call.message.answer("Оплата прошла успешно, прокси продлены")
-    pxAPI = PX6API()
-    res = await pxAPI.prolong(spisok_prolong_id,prolong_period)
-    print(res)
-    order = await get_proxy_order_by_id(prolong_id)
+        await state.clear()
+        proxies = await get_proxies_by_order(prolong_id)
+        spisok_prolong_id = []
+        for i in proxies:
+            spisok_prolong_id.append(i.px6_id)
+        await call.message.answer("Оплата прошла успешно, прокси продлены")
+        pxAPI = PX6API()
+        res = await pxAPI.prolong(spisok_prolong_id,prolong_period)
+        print(res)
+        order = await get_proxy_order_by_id(prolong_id)
 
-    admins = await get_admins()
+        admins = await get_admins()
 
-    tg_id = call.from_user.id
+        tg_id = call.from_user.id
 
-    tasks = []
-    for admin in admins:
-        tasks.append(call.bot.send_message(admin.tg_id, f"Пользователь <code>{tg_id}</code> продлил #{order.id} {order.version} {order.count}шт за {order.price}"))
-    await asyncio.gather(*tasks, return_exceptions=True)
+        tasks = []
+        for admin in admins:
+            tasks.append(call.bot.send_message(admin.tg_id, f"Пользователь <code>{tg_id}</code> продлил #{order.id} {order.version} {order.count}шт за {order.price}"))
+        await asyncio.gather(*tasks, return_exceptions=True)
 
-    if res:
-        await state.update_data(prolong_period=None)
-        await state.update_data(prolong_id=None)
+        if res:
+            await state.update_data(prolong_period=None)
+            await state.update_data(prolong_id=None)
     
