@@ -13,10 +13,10 @@ def get_payment_link(summ, email):
             },
             "confirmation": {
                 "type": "redirect",
-                "return_url": "https://t.me/Bl1tzBl1tz_Bot"  # URL возврата после оплаты
+                "return_url": "https://t.me/MOBILeproxySERVERbot"  # URL возврата после оплаты
             },
             "capture": False,
-            "description": "Оплата подписки",
+            "description": "Оплата прокси",
             "receipt": {
                 "customer": {
                     "email": email
