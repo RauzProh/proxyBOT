@@ -126,9 +126,10 @@ async def messages(message: types.Message, state: FSMContext):
             pxAPI = PX6API()
             print(proxies_order)
             get_price = await pxAPI.get_price(len(proxies), prolong_period )
-            pay_link = get_payment_link(get_price['price'], "example@mail.ru")
+            price = float(get_price['price'])*2
+            pay_link = get_payment_link(price, "example@mail.ru")
             await state.update_data(pay_id = pay_link[1])
-            await message.answer(f"Продлить на 5 дней стоит: {get_price['price']}", reply_markup=prolong_pay_buttons(pay_link))
+            await message.answer(f"Продлить на 5 дней стоит: {price}", reply_markup=prolong_pay_buttons(pay_link))
 
             
 
@@ -165,13 +166,13 @@ async def messages(message: types.Message, state: FSMContext):
                 data = await state.get_data()  # обновляем данные
                 pxAPI = PX6API()
                 final_price = await pxAPI.get_price(data['b_count'], period, data["chosen_version"])
+                price = float(final_price['price'])*2
                 await state.update_data(final_price=final_price)
-                
-                pay_link = get_payment_link(final_price['price'], "example@mail.ru")
+                pay_link = get_payment_link(price, "example@mail.ru")
                 await state.update_data(pay_id = pay_link[1])
 
 
-                await message.answer(f'Финальная цена: {final_price['price']}',reply_markup=check_pay_buttons(pay_link))
+                await message.answer(f'Финальная цена: {price}',reply_markup=check_pay_buttons(pay_link))
             except ValueError:
                 await message.answer('Пожалуйста, введите число!')
 
